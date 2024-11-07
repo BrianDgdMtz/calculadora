@@ -117,3 +117,26 @@ body{
 #c:hover{
     background-color: #F12121;
 }
+
+/* Hover temporal para todos los botones con su color correspondiente */
+#c.hover-temporal {
+    background-color: #F12121;
+}
+
+#igual.hover-temporal {
+    background-color: #52BE80;
+}
+
+#borrar.hover-temporal,
+#dividir.hover-temporal,
+#multiplicar.hover-temporal,
+#restar.hover-temporal,
+#sumar.hover-temporal {
+    background-color: #5499C7;
+}
+
+/* Hover para botones numéricos y decimales */
+.btn.hover-temporal {
+    background-color: #2C3E50;
+    color: #fff;
+}
