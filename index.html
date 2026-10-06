@@ -1,37 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora</title>
+    <title>Calculadora Científica & Gráfica</title>
+    
+    <!-- Google Fonts: Outfit for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="css/main.css">
+    
+    <!-- Librerías Matemáticas y de Gráficas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+    <script src="https://unpkg.com/d3@7"></script>
+    <script src="https://unpkg.com/function-plot@1/dist/function-plot.js"></script>
 </head>
 <body>
     
-    <div class="calculadora">
-        <div class="pantalla">0</div>
-        <button id="c" class="btn">AC</button>
-        <button id="borrar" class="btn">←</button>
-        <button id="dividir" class="btn">/</button>
-        <button id="multiplicar" class="btn">x</button>
-        <button class="btn">7</button>
-        <button class="btn">8</button>
-        <button class="btn">9</button>
-        <button id="restar" class="btn">-</button>
-        <button class="btn">4</button>
-        <button class="btn">5</button>
-        <button class="btn">6</button>
-        <button id="sumar" class="btn">+</button>
-        <button class="btn">1</button>
-        <button class="btn">2</button>
-        <button class="btn">3</button>
-        <button id="igual" class="btn">=</button>
-        <button id="cero" class="btn">0</button>
-        <button class="btn">.</button>
-        
+    <div class="calculator-container">
+        <!-- CABECERA: Modos y Tema -->
+        <header class="calc-header">
+            <div class="mode-selector">
+                <button id="mode-calc" class="mode-btn active">Calculadora</button>
+                <button id="mode-graph" class="mode-btn">Gráfica</button>
+            </div>
+            <button id="theme-toggle" class="theme-toggle" title="Cambiar Tema">
+                <span class="icon" id="theme-icon">🌙</span>
+            </button>
+        </header>
+
+        <main class="calc-main">
+            <!-- PANTALLA: Modo Calculadora -->
+            <div id="display-calc" class="display-area active-display">
+                <div class="history-screen" id="history"></div>
+                <div class="main-screen" id="screen">0</div>
+            </div>
+
+            <!-- PANTALLA: Modo Gráfica -->
+            <div id="display-graph" class="display-area graph-area">
+                <div id="plot-container">
+                    <!-- Aquí se renderiza la gráfica -->
+                </div>
+                <div class="graph-input-wrapper">
+                    <span class="function-label">f(x) =</span>
+                    <input type="text" id="graph-input" class="graph-input" placeholder="x^2" readonly>
+                </div>
+            </div>
+
+            <!-- TECLADO -->
+            <div class="keypad">
+                <!-- Fila 1: Científicas Básicas -->
+                <button class="btn btn-sci" data-val="sin(">sin</button>
+                <button class="btn btn-sci" data-val="cos(">cos</button>
+                <button class="btn btn-sci" data-val="tan(">tan</button>
+                <button class="btn btn-sci" data-val="log(">log</button>
+                <button class="btn btn-sci" data-val="ln(">ln</button>
+
+                <!-- Fila 2: Avanzadas -->
+                <button class="btn btn-sci" data-val="sqrt(">√</button>
+                <button class="btn btn-sci" data-val="^">x^y</button>
+                <button class="btn btn-sci" data-val="pi">π</button>
+                <button class="btn btn-sci" data-val="e">e</button>
+                <button class="btn btn-sci" data-val="x">x</button>
+
+                <!-- Fila 3: Acciones y Operaciones -->
+                <button class="btn btn-sci" data-val="(">(</button>
+                <button class="btn btn-sci" data-val=")">)</button>
+                <button id="c" class="btn btn-action">AC</button>
+                <button id="borrar" class="btn btn-action">⌫</button>
+                <button id="dividir" class="btn btn-op" data-val="/">/</button>
+
+                <!-- Fila 4: Números -->
+                <button class="btn btn-num" data-val="7">7</button>
+                <button class="btn btn-num" data-val="8">8</button>
+                <button class="btn btn-num" data-val="9">9</button>
+                <button class="btn btn-sci" data-val="!">!</button>
+                <button id="multiplicar" class="btn btn-op" data-val="*">×</button>
+
+                <!-- Fila 5: Números y Gráfica -->
+                <button class="btn btn-num" data-val="4">4</button>
+                <button class="btn btn-num" data-val="5">5</button>
+                <button class="btn btn-num" data-val="6">6</button>
+                <button id="btn-plot" class="btn btn-special">PLOT</button>
+                <button id="restar" class="btn btn-op" data-val="-">-</button>
+
+                <!-- Fila 6: Números -->
+                <button class="btn btn-num" data-val="1">1</button>
+                <button class="btn btn-num" data-val="2">2</button>
+                <button class="btn btn-num" data-val="3">3</button>
+                <button class="btn btn-num" data-val=".">.</button>
+                <button id="sumar" class="btn btn-op" data-val="+">+</button>
+
+                <!-- Fila 7: Cero e Igual -->
+                <button id="cero" class="btn btn-num span-2" data-val="0">0</button>
+                <button id="igual" class="btn btn-equals span-3">=</button>
+            </div>
+        </main>
     </div>
 
     <script src="js/main.js"></script>
-
 </body>
 </html>

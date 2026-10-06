@@ -1,142 +1,294 @@
+/* ===============================
+   1. VARIABLES DE TEMA (MODOS)
+=============================== */
+:root {
+    /* Modo Claro */
+    --bg-app: #e2e8f0;
+    --bg-calc: rgba(255, 255, 255, 0.65);
+    --border-calc: rgba(255, 255, 255, 0.5);
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    
+    --display-bg: rgba(255, 255, 255, 0.85);
+    --btn-bg: rgba(255, 255, 255, 0.4);
+    --btn-hover: rgba(255, 255, 255, 0.9);
+    --btn-shadow: 4px 4px 10px rgba(0,0,0,0.05), -4px -4px 10px rgba(255,255,255,0.7);
+    
+    /* Acentos de colores */
+    --accent-op: #3b82f6;      /* Azul */
+    --accent-action: #ef4444;  /* Rojo */
+    --accent-equals: #10b981;  /* Verde */
+    --accent-special: #8b5cf6; /* Púrpura */
+}
+
+[data-theme="dark"] {
+    /* Modo Oscuro */
+    --bg-app: #0f172a;
+    --bg-calc: rgba(30, 41, 59, 0.75);
+    --border-calc: rgba(255, 255, 255, 0.1);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    
+    --display-bg: rgba(15, 23, 42, 0.8);
+    --btn-bg: rgba(30, 41, 59, 0.5);
+    --btn-hover: rgba(51, 65, 85, 0.9);
+    --btn-shadow: 4px 4px 12px rgba(0,0,0,0.4), -4px -4px 12px rgba(255,255,255,0.03);
+    
+    --accent-op: #60a5fa;
+    --accent-action: #f87171;
+    --accent-equals: #34d399;
+    --accent-special: #a78bfa;
+}
+
+/* ===============================
+   2. RESET Y TIPOGRAFÍA
+=============================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: sans-serif;
+    font-family: 'Outfit', sans-serif;
+    /* Transición global para modo oscuro/claro suave */
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-body{
+body {
     min-height: 100vh;
-    background-color: #2C3E50;
+    background-color: var(--bg-app);
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 1rem;
 }
 
-.calculadora {
-    background-color: #D5D8DC;
-    color: #fff;
-    width: 350px;
-    max-width: 100%;
+/* ===============================
+   3. ESTRUCTURA PRINCIPAL (GLASSMORPHISM)
+=============================== */
+.calculator-container {
+    background-color: var(--bg-calc);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border-calc);
+    border-radius: 28px;
     padding: 1.5rem;
-    border-radius: 1rem;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: .5rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 }
 
-.pantalla {
-    grid-column: 1 / -1;
-    background-color: #2C3E50;
+/* Header */
+.calc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mode-selector {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--display-bg);
+    padding: 0.3rem;
+    border-radius: 12px;
+}
+
+.mode-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.mode-btn.active {
+    background: var(--btn-hover);
+    color: var(--text-main);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.theme-toggle {
+    background: var(--display-bg);
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--text-main);
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05), inset -2px -2px 5px rgba(255,255,255,0.02);
+}
+
+/* ===============================
+   4. PANTALLAS
+=============================== */
+.display-area {
+    display: none;
+    flex-direction: column;
+    background-color: var(--display-bg);
+    border-radius: 20px;
     padding: 1.5rem;
-    font-size: 2rem;
+    min-height: 130px;
+    box-shadow: inset 3px 3px 8px rgba(0,0,0,0.15), inset -3px -3px 8px rgba(255,255,255,0.05);
+}
+
+.display-area.active-display {
+    display: flex;
+}
+
+.history-screen {
     text-align: right;
-    border-radius: .5rem;
-    margin-bottom: 1rem;
-    font-family: monospace;
+    color: var(--text-muted);
+    font-size: 1rem;
+    min-height: 1.5rem;
+    margin-bottom: 0.5rem;
+    word-wrap: break-word;
+    letter-spacing: 1px;
+}
+
+.main-screen {
+    text-align: right;
+    color: var(--text-main);
+    font-size: 3rem;
     font-weight: 600;
     word-wrap: break-word;
+    overflow-x: auto;
+    /* Ocultar scrollbar */
+    scrollbar-width: none; 
+}
+.main-screen::-webkit-scrollbar {
+    display: none;
 }
 
-.btn{
-    background-color: #D5D8DC;
-    color: #000;
-    font-size: 17px;
-    border: 0;
-    padding: 1.5em .5rem;
+/* Pantalla Gráfica */
+.graph-area {
+    padding: 0.75rem;
+    min-height: 250px;
+    justify-content: space-between;
+}
+
+#plot-container {
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    background-color: #ffffff; /* El grid del plot se ve mejor en blanco, incluso en modo oscuro */
+    overflow: hidden;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+}
+
+.graph-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-calc);
+    border-radius: 10px;
+}
+
+.function-label {
+    color: var(--accent-special);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.graph-input {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 1.1rem;
+    font-weight: 400;
+    outline: none;
+    width: 100%;
+    letter-spacing: 1px;
+}
+
+/* ===============================
+   5. TECLADO
+=============================== */
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.btn {
+    background-color: var(--btn-bg);
+    color: var(--text-main);
+    border: none;
+    border-radius: 14px;
+    padding: 0.8rem 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--btn-shadow);
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 100px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    user-select: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.btn:hover{
-    background-color: #2C3E50;
-    color: #fff;
+.btn:hover, .btn.hover-temporal {
+    background-color: var(--btn-hover);
+    transform: translateY(-2px);
 }
 
-#cero{
+.btn:active {
+    transform: translateY(2px);
+    box-shadow: none;
+}
+
+/* Especializaciones de Botones */
+.btn-sci {
+    color: var(--accent-special);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.btn-action {
+    color: var(--accent-action);
+}
+
+.btn-op {
+    color: var(--accent-op);
+    font-size: 1.5rem;
+}
+
+.btn-special {
+    background-color: var(--accent-special);
+    color: white;
+    font-size: 1rem;
+}
+
+.btn-special:hover {
+    background-color: #7c3aed; /* Purpura mas oscuro en hover */
+    color: white;
+}
+
+.btn-equals {
+    background-color: var(--accent-equals);
+    color: white;
+    font-size: 1.6rem;
+}
+
+.btn-equals:hover {
+    background-color: #059669; /* Verde oscuro */
+    color: white;
+}
+
+/* Ocupación de columnas */
+.span-2 {
     grid-column: span 2;
 }
 
-#igual{
-    grid-row: span 2;
-    background-color: #27AE60;
-}
-
-#igual:hover{
-    background-color: #52BE80;
-}
-
-#borrar{
-    background-color: #2980B9;
-}
-
-#borrar:hover{
-    background-color: #5499C7;
-}
-
-#dividir{
-    background-color: #2980B9;
-}
-
-#dividir:hover{
-    background-color: #5499C7;
-}
-
-#multiplicar{
-    background-color: #2980B9;
-}
-
-#multiplicar:hover{
-    background-color: #5499C7;
-}
-
-#restar{
-    background-color: #2980B9;
-}
-
-#restar:hover{
-    background-color: #5499C7;
-}
-
-#sumar{
-    background-color: #2980B9;
-}
-
-#sumar:hover{
-    background-color: #5499C7;
-}
-
-#c{
-    background-color: #CF0E0E;
-}
-
-#c:hover{
-    background-color: #F12121;
-}
-
-/* Hover temporal para todos los botones con su color correspondiente */
-#c.hover-temporal {
-    background-color: #F12121;
-}
-
-#igual.hover-temporal {
-    background-color: #52BE80;
-}
-
-#borrar.hover-temporal,
-#dividir.hover-temporal,
-#multiplicar.hover-temporal,
-#restar.hover-temporal,
-#sumar.hover-temporal {
-    background-color: #5499C7;
-}
-
-/* Hover para botones numéricos y decimales */
-.btn.hover-temporal {
-    background-color: #2C3E50;
-    color: #fff;
+.span-3 {
+    grid-column: span 3;
 }
